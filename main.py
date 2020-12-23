@@ -28,6 +28,29 @@ def generate_password():
 
     password_input.insert(0, password)
 
+# ---------------------------- FIND PASSWORD ------------------------------- #
+
+def find_password():
+
+    website = website_input.get()
+
+    try:
+        with open('data.json', 'r') as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="No data file found!")
+    else:
+        if website in data:
+            username = data[website]["username"]
+            password = data[website]["password"]
+            messagebox.showinfo(title=website, message=f"Username: {username} \n"
+                                                        f"Password: {password}")
+            pyperclip.copy(password)
+        else:
+            messagebox.showinfo(title="Error", message=f"No details for {website} exists.")
+
+
+
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 def save_password():
@@ -72,9 +95,12 @@ canvas.grid(column=1, row=0)
 website_label = tkinter.Label(text="Website:")
 website_label.grid(row=1, column=0)
 
-website_input = tkinter.Entry(width=52)
+website_input = tkinter.Entry(width=33)
 website_input.focus()
-website_input.grid(column=1, row=1, columnspan=2)
+website_input.grid(column=1, row=1)
+
+search_button = tkinter.Button(text="Search", width=15, command=find_password)
+search_button.grid(column=2, row=1)
 
 username_label = tkinter.Label(text="Email/Username:")
 username_label.grid(row=2, column=0)
